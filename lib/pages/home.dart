@@ -23,12 +23,12 @@ class HomePage extends StatelessWidget {
         backgroundColor: Colors.red,
       ),
       body: Container(
-        color: Colors.green,
+        color: Colors.white,
         child: Padding(
           padding: EdgeInsets.all(20),
           child: Center(
               child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Text(

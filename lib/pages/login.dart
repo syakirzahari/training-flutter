@@ -32,10 +32,12 @@ class _LoginPageState extends State<LoginPage> {
     final size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
-        title: Text('OST Login Page'),
-        backgroundColor: Colors.red,
+        title: Text('Test Page'),
+        backgroundColor: Colors.yellow,
+        centerTitle: false,
       ),
-      body: Container(
+      body: SingleChildScrollView(
+          child: Container(
         //Untuk set screen height dan width/responsive screen
         height: size.height,
         width: size.width,
@@ -190,7 +192,11 @@ class _LoginPageState extends State<LoginPage> {
 
                         // Navigator.of(context).pushAndRemoveUntil(
                         //     MaterialPageRoute(
-                        //         builder: (BuildContext context) => HomePage()),
+                        //         builder: (BuildContext context) => HomePage(
+                        //             name: name,
+                        //             password: _controllerPassword.text,
+                        //             age: 15,
+                        //             details: 'Ini kelas training')),
                         //     (Route<dynamic> route) => false);
                       },
                       child: Text(
@@ -205,7 +211,7 @@ class _LoginPageState extends State<LoginPage> {
                     )),
               ],
             )),
-      ),
+      )),
     );
   }
 
