@@ -30,6 +30,10 @@ cupertino_icons
 2.12
 file:///F:/flutter/.pub-cache/hosted/pub.dartlang.org/cupertino_icons-1.0.3/
 file:///F:/flutter/.pub-cache/hosted/pub.dartlang.org/cupertino_icons-1.0.3/lib/
+equatable
+2.12
+file:///F:/flutter/.pub-cache/hosted/pub.dartlang.org/equatable-2.0.3/
+file:///F:/flutter/.pub-cache/hosted/pub.dartlang.org/equatable-2.0.3/lib/
 fake_async
 2.12
 file:///F:/flutter/.pub-cache/hosted/pub.dartlang.org/fake_async-1.2.0/
@@ -42,6 +46,10 @@ file
 2.12
 file:///F:/flutter/.pub-cache/hosted/pub.dartlang.org/file-6.1.2/
 file:///F:/flutter/.pub-cache/hosted/pub.dartlang.org/file-6.1.2/lib/
+fl_chart
+2.12
+file:///F:/flutter/.pub-cache/hosted/pub.dartlang.org/fl_chart-0.36.3/
+file:///F:/flutter/.pub-cache/hosted/pub.dartlang.org/fl_chart-0.36.3/lib/
 js
 2.12
 file:///F:/flutter/.pub-cache/hosted/pub.dartlang.org/js-0.6.3/
@@ -70,6 +78,10 @@ path_provider_windows
 2.12
 file:///F:/flutter/.pub-cache/hosted/pub.dartlang.org/path_provider_windows-2.0.1/
 file:///F:/flutter/.pub-cache/hosted/pub.dartlang.org/path_provider_windows-2.0.1/lib/
+pedantic
+2.12
+file:///F:/flutter/.pub-cache/hosted/pub.dartlang.org/pedantic-1.11.1/
+file:///F:/flutter/.pub-cache/hosted/pub.dartlang.org/pedantic-1.11.1/lib/
 platform
 2.12
 file:///F:/flutter/.pub-cache/hosted/pub.dartlang.org/platform-3.0.0/
