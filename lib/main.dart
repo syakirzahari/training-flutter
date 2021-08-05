@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:training/pages/details.dart';
 import 'package:training/pages/login.dart';
 
 void main() {
@@ -28,7 +30,46 @@ class MyApp extends StatelessWidget {
 
       //1. Page pertama yang akan app load bila launch
       //2. Import path page file kat header file. cth: import 'package:training/pages/login.dart';
-      home: LoginPage(),
+      home: CheckAuth(),
+    );
+  }
+}
+
+class CheckAuth extends StatefulWidget {
+  @override
+  _CheckAuthState createState() => _CheckAuthState();
+}
+
+class _CheckAuthState extends State<CheckAuth> {
+  bool isAuth = false;
+
+  @override
+  void initState() {
+    _checkIfLoggedIn();
+    super.initState();
+  }
+
+  void _checkIfLoggedIn() async {
+    SharedPreferences localStorage = await SharedPreferences.getInstance();
+    var token = localStorage.getString('token');
+    if (token != null) {
+      setState(() {
+        isAuth = true;
+        print(token);
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    Widget child;
+    if (isAuth) {
+      child = DetailsPage();
+    } else {
+      child = LoginPage();
+    }
+    return Scaffold(
+      body: child,
     );
   }
 }

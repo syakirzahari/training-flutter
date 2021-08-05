@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:training/pages/home.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:training/models/auth.dart';
+import 'package:training/pages/details.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class LoginPage extends StatefulWidget {
   LoginPage({Key? key}) : super(key: key);
@@ -10,241 +13,188 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  GlobalKey<FormState> globalFormKey = GlobalKey<FormState>();
   TextEditingController _controllerUsername = TextEditingController();
   TextEditingController _controllerPassword = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
 
-//untuk initialize page state (guna bila lauch current page)
-  @override
-  void initState() {
-    super.initState();
-  }
+  Future<LoginResponse> login(String username, String password) async {
+    final response = await http.post(
+        Uri.parse("http://svr.myopensoft.net:8060/planmalaysia-iprp/api/login"),
+        body: {
+          "username": username,
+          "password": password,
+        });
 
-//untuk close/dispose page state (guna bila tutup current page)
-  @override
-  void dispose() {
-    // DO STUFF
-    super.dispose();
+    print(response.body);
+
+    if (response.statusCode == 200) {
+      return LoginResponse.fromJson(
+        json.decode(response.body),
+      );
+    } else {
+      throw Exception('Failed to load data!');
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
-        title: Text('Test Page'),
-        backgroundColor: Colors.yellow,
-        centerTitle: false,
+        title: Text('Login Page'),
+        backgroundColor: Colors.red[900],
+        centerTitle: true,
       ),
-      body: SingleChildScrollView(
-          child: Container(
-        //Untuk set screen height dan width/responsive screen
-        height: size.height,
-        width: size.width,
-        child: Form(
-            key: globalFormKey,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Container(
-                  //untuk cantikkan field
-                  decoration: BoxDecoration(
+      body: Container(
+          child: Form(
+        key: _formKey,
+        child: Column(
+          children: [
+            Container(
+              //untuk cantikkan field
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.all(
+                  Radius.circular(50),
+                ),
+              ),
+              margin: EdgeInsets.only(bottom: 20),
+              child: TextFormField(
+                controller: _controllerUsername,
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w400,
+                  color: Color(0xff000912),
+                ),
+                decoration: InputDecoration(
+                  contentPadding: EdgeInsets.symmetric(vertical: 25),
+                  hintText: 'Sila Masukkan ID Pengguna',
+                  hintStyle: TextStyle(
+                    color: Color(0xffA6B0BD),
+                  ),
+                  fillColor: Colors.white,
+                  filled: true,
+                  prefixIcon: Icon(Icons.person),
+                  prefixIconConstraints: BoxConstraints(
+                    minWidth: 75,
+                  ),
+                  enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.all(
                       Radius.circular(50),
                     ),
+                    borderSide: BorderSide(color: Colors.white),
                   ),
-                  margin: EdgeInsets.only(bottom: 20),
-                  child: TextFormField(
-                    controller: _controllerUsername,
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w400,
-                      color: Color(0xff000912),
-                    ),
-                    // decoration: InputDecoration(
-                    //   contentPadding: EdgeInsets.symmetric(vertical: 25),
-                    //   hintText: 'Sila isi',
-                    //   hintStyle: TextStyle(
-                    //     color: Color(0xffA6B0BD),
-                    //   ),
-                    //   fillColor: Colors.white,
-                    //   filled: true,
-                    //   prefixIcon: Icon(Icons.person),
-                    //   prefixIconConstraints: BoxConstraints(
-                    //     minWidth: 75,
-                    //   ),
-                    //   enabledBorder: OutlineInputBorder(
-                    //     borderRadius: BorderRadius.all(
-                    //       Radius.circular(50),
-                    //     ),
-                    //     borderSide: BorderSide(color: Colors.white),
-                    //   ),
-                    //   focusedBorder: OutlineInputBorder(
-                    //     borderRadius: BorderRadius.all(
-                    //       Radius.circular(50),
-                    //     ),
-                    //     borderSide: BorderSide(color: Colors.white),
-                    //   ),
-                    // ),
-                  ),
-                ),
-                SizedBox(height: 20),
-                Container(
-                  //untuk cantikkan field
-                  decoration: BoxDecoration(
+                  focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.all(
                       Radius.circular(50),
                     ),
+                    borderSide: BorderSide(color: Colors.white),
                   ),
-                  margin: EdgeInsets.only(bottom: 20),
-                  child: TextFormField(
-                    controller: _controllerPassword,
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w400,
-                      color: Color(0xff000912),
+                ),
+                validator: (value) {
+                  if (value!.isEmpty) {
+                    return 'Sila Masukkan ID Pengguna';
+                  } else {
+                    return null;
+                  }
+                },
+              ),
+            ),
+            Container(
+              //untuk cantikkan field
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.all(
+                  Radius.circular(50),
+                ),
+              ),
+              margin: EdgeInsets.only(bottom: 20),
+              child: TextFormField(
+                controller: _controllerPassword,
+                // obscureText: true,
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w400,
+                  color: Color(0xff000912),
+                ),
+                decoration: InputDecoration(
+                  contentPadding: EdgeInsets.symmetric(vertical: 25),
+                  hintText: 'Sila Masukkan Kata Laluan',
+                  hintStyle: TextStyle(
+                    color: Colors.red,
+                  ),
+                  fillColor: Colors.white,
+                  filled: true,
+                  prefixIcon: Icon(Icons.password),
+                  prefixIconConstraints: BoxConstraints(
+                    minWidth: 75,
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(50),
                     ),
-                    decoration: InputDecoration(
-                      contentPadding: EdgeInsets.symmetric(vertical: 25),
-                      hintText: 'Sila isi',
-                      hintStyle: TextStyle(
-                        color: Color(0xffA6B0BD),
-                      ),
-                      fillColor: Colors.white,
-                      filled: true,
-                      prefixIcon: Icon(Icons.person),
-                      prefixIconConstraints: BoxConstraints(
-                        minWidth: 75,
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(50),
-                        ),
-                        borderSide: BorderSide(color: Colors.white),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(50),
-                        ),
-                        borderSide: BorderSide(color: Colors.white),
-                      ),
+                    borderSide: BorderSide(color: Colors.white),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(50),
                     ),
+                    borderSide: BorderSide(color: Colors.white),
                   ),
                 ),
-                SizedBox(height: 10),
-                TextButton(
-                  style: TextButton.styleFrom(
-                    primary: Colors.blue,
-                    backgroundColor: Colors.blue,
-                  ),
-                  onPressed: () {
-                    _saveName();
-                    print('test text button');
-                  },
-                  child: Text(
-                    'Sila Tekan Untuk Simpan Nama',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ),
-                OutlinedButton(
-                  style: TextButton.styleFrom(
-                    primary: Colors.red,
-                  ),
-                  onPressed: () => _showMyDialog(),
-                  child: Text('Sila Tekan'),
-                ),
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    primary: Colors.red, // background
-                    onPrimary: Colors.white, // foreground
-                  ),
-                  onPressed: () {},
-                  child: Text('Sila Tekan'),
-                ),
-                Container(
-                    width: 300,
-                    margin: EdgeInsets.only(top: 20, bottom: 50),
-                    decoration: BoxDecoration(
-                        color: Colors.green,
-                        borderRadius: BorderRadius.all(Radius.circular(50)),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Color(0x60008FFF),
-                            blurRadius: 10,
-                            offset: Offset(0, 5),
-                            spreadRadius: 0,
-                          ),
-                        ]),
-                    child: TextButton(
-                      onPressed: () {
-                        print('test text button');
-                        String name = _controllerUsername.text;
+                validator: (value) {
+                  if (value!.isEmpty) {
+                    return 'Sila Masukkan Kata Laluan';
+                  } else {
+                    return null;
+                  }
+                },
+              ),
+            ),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                primary: Colors.red, // background
+                onPrimary: Colors.white, // foreground
+              ),
+              onPressed: () async {
+                SharedPreferences prefs = await SharedPreferences.getInstance();
 
-                        Navigator.of(context).push(
+                if (validateAndSave()) {
+                  // await prefs.setString('email', _controllerUsername.text);
+
+                  login(_controllerUsername.text, _controllerPassword.text)
+                      .then((value) {
+                    if (value.token != null) {
+                      print(value.token.toString());
+                      prefs.setString('token', value.token.toString());
+
+                      Navigator.of(context).pushAndRemoveUntil(
                           MaterialPageRoute(
-                              builder: (BuildContext context) => HomePage(
-                                  name: name,
-                                  password: _controllerPassword.text,
-                                  age: 15,
-                                  details: 'Ini kelas training')),
-                        );
-
-                        // Navigator.of(context).pushAndRemoveUntil(
-                        //     MaterialPageRoute(
-                        //         builder: (BuildContext context) => HomePage(
-                        //             name: name,
-                        //             password: _controllerPassword.text,
-                        //             age: 15,
-                        //             details: 'Ini kelas training')),
-                        //     (Route<dynamic> route) => false);
-                      },
-                      child: Text(
-                        "SILA TEKAN",
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w800,
-                          color: Colors.white,
-                          letterSpacing: 3,
+                              builder: (BuildContext context) => DetailsPage(
+                                  username: value.username.toString(),
+                                  token: value.token.toString())),
+                          (Route<dynamic> route) => false);
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('ID Pengguna/Kata Laluan Tidak Tepat'),
                         ),
-                      ),
-                    )),
-              ],
-            )),
+                      );
+                    }
+                  });
+                }
+              },
+              child: Text('Log Masuk'),
+            ),
+          ],
+        ),
       )),
     );
   }
 
-  Future<void> _showMyDialog() async {
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: false, // user must tap button!
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('AlertDialog Title Test'),
-          content: SingleChildScrollView(
-            child: ListBody(
-              children: const <Widget>[
-                Text('This is a demo alert dialog.'),
-                Text('How are you?'),
-              ],
-            ),
-          ),
-          actions: <Widget>[
-            TextButton(
-              child: const Text('OK'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  _saveName() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setString('name', _controllerUsername.text);
+  bool validateAndSave() {
+    final form = _formKey.currentState!;
+    if (form.validate()) {
+      form.save();
+      return true;
+    }
+    return false;
   }
 }
